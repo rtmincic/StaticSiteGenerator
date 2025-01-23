@@ -1,6 +1,8 @@
 import unittest
 
+from src.htmlnode import LeafNode
 from src.textnode import TextNode, TextType
+
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
@@ -32,6 +34,10 @@ class TestTextNode(unittest.TestCase):
         node = TextNode("This is a Text node", TextType.BOLD, "awebsite")
         node2 = TextNode("This is a Text nodes", TextType.BOLD, "awebsite")
         self.assertNotEqual(node, node2)
+
+    def test_bold_to_html(self):
+        node = TextNode("This is a BOLD node", TextType.BOLD)
+        self.assertEqual(node.self_to_html_node().to_html(), LeafNode("b", "This is a BOLD node").to_html())
 
 
 if __name__ == "__main__":
