@@ -39,6 +39,3 @@ class TestTextNode(unittest.TestCase):
         node = TextNode("This is a BOLD node", TextType.BOLD)
         self.assertEqual(node.self_to_html_node().to_html(), LeafNode("b", "This is a BOLD node").to_html())
 
-
-if __name__ == "__main__":
-    unittest.main()

@@ -1,5 +1,5 @@
 from enum import Enum
-from .htmlnode import HTMLNode, LeafNode
+from htmlnode import HTMLNode, LeafNode
 
 class TextType(Enum):
     NORMAL = "normal"
@@ -37,5 +37,4 @@ class TextNode():
         if self.text_type == TextType.CODE:
             return LeafNode("code", self.text)
         if self.text_type == TextType.IMAGE:
-            return LeafNode("img", "", {"src": self.url, "alt": self.text})
-        
+            return LeafNode("img", "", {"src": self.url, "alt": self.text})       
