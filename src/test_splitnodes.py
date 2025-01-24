@@ -1,5 +1,5 @@
-from src.textnode import TextNode, TextType
-from src.important_functions import split_nodes_delimiter
+from textnode import TextNode, TextType
+from important_functions import split_nodes_delimiter
 import unittest
 import re
 
@@ -47,7 +47,13 @@ class SplitNodesDelimiterTest(unittest.TestCase):
             TextNode("", TextType.NORMAL),  # Trailing empty node
             TextNode("This is already bold", TextType.BOLD),
         ]
-        self.assertEqual(split_nodes_delimiter(old_nodes, delimiter, text_type), expected_nodes)
+        self.assertEqual(split_nodes_delimiter(old_nodes, delimiter, text_type), [
+            TextNode("This is normal", TextType.NORMAL),
+            TextNode("This is ", TextType.NORMAL),
+            TextNode("bold", TextType.BOLD),
+            TextNode("", TextType.NORMAL),  # Trailing empty node
+            TextNode("This is already bold", TextType.BOLD),
+        ])
 
     def test_empty_node(self):
         old_nodes = [TextNode("", TextType.NORMAL)]

@@ -1,6 +1,6 @@
 import unittest
 
-from src.htmlnode import *
+from htmlnode import *
 
 class TestParentNode(unittest.TestCase):
     def test_everything(self):
