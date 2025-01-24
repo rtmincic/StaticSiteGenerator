@@ -54,4 +54,3 @@ class TestParentNode(unittest.TestCase):
                         ]
                         )
         self.assertEqual(node.to_html(), "<p><b>Bold Text</b><p><i>Italic text</i><h1>Header text</h1></p><a>Link Text</a></p>")
-

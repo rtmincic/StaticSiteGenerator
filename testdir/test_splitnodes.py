@@ -1,6 +1,7 @@
-from textnode import TextNode, TextType
-from text_node_splitter import split_nodes_delimiter
+from src.textnode import TextNode, TextType
+from src.important_functions import split_nodes_delimiter
 import unittest
+import re
 
 class SplitNodesDelimiterTest(unittest.TestCase):
 
@@ -66,6 +67,5 @@ class SplitNodesDelimiterTest(unittest.TestCase):
         ]
         self.assertEqual(split_nodes_delimiter(old_nodes, delimiter, text_type), expected_nodes)
 
-if __name__ == '__main__':
-    unittest.main()
+
 
