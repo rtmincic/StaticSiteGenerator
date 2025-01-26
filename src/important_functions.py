@@ -4,14 +4,14 @@ import re
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     list_of_new_nodes = []
     for node in old_nodes:
-        if node.text_type is not TextType.NORMAL:
+        if node.text_type is not TextType.TEXT:
             list_of_new_nodes.append(node)
         else:
             if node.text.count(delimiter) % 2 == 0:
                 split_node = node.text.split(delimiter)
                 for i in range(0, len(split_node)):
                     if i % 2 == 0:
-                        list_of_new_nodes.append(TextNode(split_node[i], TextType.NORMAL))
+                        list_of_new_nodes.append(TextNode(split_node[i], TextType.TEXT))
                     else:
                         list_of_new_nodes.append(TextNode(split_node[i], text_type))
             else:
@@ -20,6 +20,3 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
 def extract_markdown_images(text):
     return re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)" , text)
-
-def extract_markdown_links(text):
-    return re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)

@@ -1,17 +1,11 @@
 from textnode import TextType, TextNode
 from htmlnode import *
-from important_functions import split_nodes_delimiter
+from important_functions import text_to_textnodes, extract_markdown_bold, split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_image, split_nodes_link
+import re
 
 def main():
-    old_nodes = [TextNode("This |is| a |test", TextType.NORMAL)]
-    expected_nodes = [
-            TextNode("This ", TextType.NORMAL),
-            TextNode("is", TextType.BOLD),
-            TextNode(" a ", TextType.NORMAL),
-            TextNode("test", TextType.BOLD),
-            TextNode("", TextType.NORMAL),  # Trailing empty node
-        ]
-    
-    split_nodes_delimiter(old_nodes,"|", TextType.BOLD)
-    print("There is a missing closing delimiter")
+    text = "this text has a little of everything **this is bold** here is an image ![to boot dev](www.boot.dev) and *this is in italics* here is a link [to google](www.google.com) finally `this is a code` that should be everything"
+    everything_split = text_to_textnodes(text)
+    print(everything_split)
+
 main()

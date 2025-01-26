@@ -1,5 +1,3 @@
-
-
 class HTMLNode():
     def __init__(self, tag=None, value=None, children=None, props=None):
         self.tag = tag
@@ -8,9 +6,11 @@ class HTMLNode():
         self.props = props
 
     def to_html(self):
-        raise NotImplementedError
+        raise NotImplementedError("to_html method not implemented")
     
     def props_to_html(self):
+        if self.props is None:
+            return ""
         props = ""
         for key in self.props:
             props = props + f' {key}="{self.props[key]}"'
@@ -35,12 +35,12 @@ class LeafNode(HTMLNode):
         
 class ParentNode(HTMLNode):
     def __init__(self, tag, children, props=None):
-        super().__init__(tag, value="", children=children, props=props)
+        super().__init__(tag, None, children, props)
 
     def to_html(self):
         if self.tag is None:
             raise ValueError("Tag should have a value")
-        if not self.children:
+        if self.children is None:
             raise ValueError("There should be children assigned to this parent node")
         if self.props:
             opening_tag = f"<{self.tag}{self.props_to_html()}>"
