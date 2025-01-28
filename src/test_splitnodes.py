@@ -1,5 +1,5 @@
 from textnode import TextNode, TextType
-from important_functions import split_nodes_delimiter, split_nodes_link, split_nodes_image, markdown_to_blocks
+from important_functions import split_nodes_delimiter, split_nodes_link, split_nodes_image, markdown_to_blocks, block_to_block_type
 import unittest
 import re
 
@@ -220,3 +220,88 @@ class SplitNodesDelimiterTest(unittest.TestCase):
                     "* This is the first list item in a list block\n* This is a list item\n* This is another list item"
                     ]
         self.assertEqual(markdown_to_blocks(markdown),expected)
+
+    def test_headings(self):
+        markdown = "# This is a heading"
+        expected = "heading"
+        self.assertEqual(block_to_block_type(markdown), expected)
+
+    def test_headings2(self):
+        markdown = "## This is a heading"
+        expected = "heading"
+        self.assertEqual(block_to_block_type(markdown), expected)
+    
+    def test_headings_words_below(self):
+        markdown = "# This is a heading\nThis is part of the block"
+        expected = "heading"
+        self.assertEqual(block_to_block_type(markdown), expected)
+
+    def test_nothing_in_block(self):
+        markdown = "This is a paragraph and shouldnt be anything else."
+        excepted = "paragraph"
+        self.assertEqual(block_to_block_type(markdown), excepted)
+
+    def test_code_block(self):
+        markdown = "``` This is a code block ```"
+        excepted = "code"
+        self.assertEqual(block_to_block_type(markdown), excepted)
+
+    def test_code_block_multiple_lines(self):
+        markdown = "``` This is a code block\nThis is part of a code block\nhere to this is```"
+        excepted = "code"
+        self.assertEqual(block_to_block_type(markdown), excepted)
+
+    def test_code_block_multiple_lines_no_closing(self):
+        markdown = "``` This is a code block\nThis is part of a code block\nhere to this is"
+        excepted = "paragraph"
+        self.assertEqual(block_to_block_type(markdown), excepted)
+
+    def test_code_block_multiple_lines_no_opening(self):
+        markdown = "This is a code block\nThis is part of a code block\nhere to this is```"
+        excepted = "paragraph"
+        self.assertEqual(block_to_block_type(markdown), excepted)
+
+    def test_quote_block(self):
+        markdown = "> This is part of a quote block\n>This is also part of a quote block\n> Even this is part of a quote block"
+        excepted = "quote"
+        self.assertEqual(block_to_block_type(markdown), excepted)
+
+    def test_quote_block_missing_pointer(self):
+        markdown = "> This is part of a quote block\nThis is also part of a quote block\n> Even this is part of a quote block"
+        excepted = "paragraph"
+        self.assertEqual(block_to_block_type(markdown), excepted)
+
+    def test_ul_star(self):
+        markdown = "* This is part of list\n* This is too\n* Same here"
+        excepted = "unordered_list"
+        self.assertEqual(block_to_block_type(markdown), excepted)
+
+    def test_ul_dash(self):
+        markdown = "- This is part of list\n- This is too\n- Same here"
+        excepted = "unordered_list"
+        self.assertEqual(block_to_block_type(markdown), excepted)
+    
+    def test_ul_missing_star_or_dash(self):
+        markdown = "- This is part of list\n This is too\n- Same here"
+        excepted = "paragraph"
+        self.assertEqual(block_to_block_type(markdown), excepted)
+
+    def test_ol(self):
+        markdown = "1. This is part of list\n2. This is too\n3. Same here"
+        excepted = "ordered_list"
+        self.assertEqual(block_to_block_type(markdown), excepted)
+
+    def test_ol_out_of_order(self):
+        markdown = "2. This is part of list\n1. This is too\n3. Same here"
+        excepted = "paragraph"
+        self.assertEqual(block_to_block_type(markdown), excepted)
+
+    def test_ol_no_first_number(self):
+        markdown = "This is part of list\n1. This is too\n3. Same here"
+        excepted = "paragraph"
+        self.assertEqual(block_to_block_type(markdown), excepted)
+
+    def test_ol_with_double_digit_numbers(self):
+        markdown = "1. This is part of list\n2. This is too\n3. Same here\n4. This is part of list\n5. This is too\n6. Same here\n7. This is part of list\n8. This is too\n9. Same here\n10. This is part of list\n11. This is too\n12. Same here"
+        excepted = "ordered_list"
+        self.assertEqual(block_to_block_type(markdown), excepted)

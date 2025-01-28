@@ -1,4 +1,5 @@
 from textnode import TextNode, TextType
+from htmlnode import *
 import re
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
@@ -130,3 +131,59 @@ def markdown_to_blocks(markdown):
         if temp_block:
             new_blocks.append(temp_block)
     return new_blocks
+
+def block_to_block_type(markdown):
+    heading_check = markdown.split(" ", 1)
+    lines = markdown.split("\n")
+    quote = False
+    ul_list = False
+    order_list = False
+    headings = ["#", "##", "###", "####", "#####", "######"]
+    if heading_check[0] in headings:
+        return "heading"
+    if markdown[:3] == "```" and markdown[-3:] == "```":
+        return "code"
+    for line in lines:
+        if line[0] == ">":
+            quote = True
+        else:
+            quote = False
+            break
+    if quote == True:
+        return "quote"
+    for line in lines:
+        if len(line) > 2:
+            if line[:2] == "* " or line[:2] == "- ":
+                ul_list = True
+            else:
+                ul_list = False
+                break
+    if ul_list == True:
+        return "unordered_list"
+    for index, line in enumerate(lines):
+        parts = line.split(".")
+        if parts[0].isdigit():
+            if parts[0] == f"{index + 1}" and parts[1][0] == " ":
+                order_list = True
+            else:
+                order_list = False
+                break
+    if order_list == True:
+        return "ordered_list"
+    return "paragraph"
+
+def markdown_to_html_node(markdown):
+    tags = {
+        "paragraph": "p",
+        "quote": "blockquote",
+        "ordered_list": "ol",
+        "unordered_list": "ul",
+        "list_item": "li",
+        "code": "code",
+        
+    }
+    blocks = markdown_to_blocks(markdown)
+    for block in blocks:
+        current_block = block_to_block_type(block)
+        new_node = HTMLNode()
+    return
