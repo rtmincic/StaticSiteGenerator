@@ -41,7 +41,7 @@ def split_nodes_image(old_nodes):
             continue
         original_text = old_node.text
         images = extract_markdown_images(original_text)
-        if len(images) == 0:
+        if len(images) == 0 and old_node.text != "":
             new_nodes.append(old_node)
             continue
         for image in images:
@@ -70,7 +70,7 @@ def split_nodes_link(old_nodes):
             continue
         original_text = old_node.text
         links = extract_markdown_links(original_text)
-        if len(links) == 0:
+        if len(links) == 0  and old_node.text != "":
             new_nodes.append(old_node)
             continue
         for link in links:
@@ -121,3 +121,12 @@ def process_delimiters(orginal_node, delimiter, text_type):
         else:
             updated_list.append(node)
     return updated_list
+
+def markdown_to_blocks(markdown):
+    new_blocks = []
+    blocks = markdown.split("\n\n")
+    for block in blocks:
+        temp_block = block.strip()
+        if temp_block:
+            new_blocks.append(temp_block)
+    return new_blocks

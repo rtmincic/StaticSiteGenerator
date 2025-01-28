@@ -1,5 +1,5 @@
 from textnode import TextNode, TextType
-from important_functions import split_nodes_delimiter, split_nodes_link, split_nodes_image
+from important_functions import split_nodes_delimiter, split_nodes_link, split_nodes_image, markdown_to_blocks
 import unittest
 import re
 
@@ -196,3 +196,27 @@ class SplitNodesDelimiterTest(unittest.TestCase):
             TextNode(" that should be all the links.", TextType.TEXT)
         ]
         self.assertEqual(split_nodes_image(old_nodes), expected_nodes)
+
+    def test_splitting_markdown(self):
+        markdown = "# This is a heading\n\nThis is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n* This is the first list item in a list block\n* This is a list item\n* This is another list item"
+        expected = ["# This is a heading", 
+                    "This is a paragraph of text. It has some **bold** and *italic* words inside of it.",
+                    "* This is the first list item in a list block\n* This is a list item\n* This is another list item"
+                    ]
+        self.assertEqual(markdown_to_blocks(markdown),expected)
+
+    def test_splitting_empty_blocks(self):
+        markdown = "# This is a heading\n\nThis is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n\n* This is the first list item in a list block\n* This is a list item\n* This is another list item"
+        expected = ["# This is a heading", 
+                    "This is a paragraph of text. It has some **bold** and *italic* words inside of it.",
+                    "* This is the first list item in a list block\n* This is a list item\n* This is another list item"
+                    ]
+        self.assertEqual(markdown_to_blocks(markdown),expected)
+
+    def test_splitting_empty_blocks_with_spaces(self):
+        markdown = "# This is a heading\n\nThis is a paragraph of text. It has some **bold** and *italic* words inside of it.\n\n         \n\n* This is the first list item in a list block\n* This is a list item\n* This is another list item"
+        expected = ["# This is a heading", 
+                    "This is a paragraph of text. It has some **bold** and *italic* words inside of it.",
+                    "* This is the first list item in a list block\n* This is a list item\n* This is another list item"
+                    ]
+        self.assertEqual(markdown_to_blocks(markdown),expected)
