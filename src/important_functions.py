@@ -87,31 +87,13 @@ def split_nodes_link(old_nodes):
     return new_nodes
 
 def text_to_textnodes(text):
-    orginal_node = [TextNode(text, TextType.TEXT)]
-    image_check = extract_markdown_images(text)
-    link_check = extract_markdown_links(text)
-    bold_check = extract_markdown_bold(text)
-    italic_check = extract_markdown_italics(text)
-    code_check = extract_markdown_code(text)
-    if image_check:
-        orginal_node = split_nodes_image(orginal_node)
-    if link_check:
-        updated_list = []
-        for node in orginal_node:
-            if node.text_type == TextType.TEXT:
-                split_links = split_nodes_link([node])
-                for linknode in split_links:
-                    updated_list.append(linknode)
-            else:
-                updated_list.append(node)
-    orginal_node = updated_list
-    if bold_check:
-        orginal_node = process_delimiters(orginal_node, "**", TextType.BOLD)
-    if italic_check:
-        orginal_node = process_delimiters(orginal_node, "*", TextType.ITALIC)
-    if code_check:
-        orginal_node = process_delimiters(orginal_node, "`", TextType.CODE)
-    return orginal_node
+    nodes = [TextNode(text, TextType.TEXT)]
+    nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
+    nodes = split_nodes_delimiter(nodes, "*", TextType.ITALIC)
+    nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
+    nodes = split_nodes_image(nodes)
+    nodes = split_nodes_link(nodes)
+    return nodes
 
 def process_delimiters(orginal_node, delimiter, text_type):
     updated_list = []
@@ -123,74 +105,3 @@ def process_delimiters(orginal_node, delimiter, text_type):
             updated_list.append(node)
     return updated_list
 
-def markdown_to_blocks(markdown):
-    new_blocks = []
-    blocks = markdown.split("\n\n")
-    for block in blocks:
-        temp_block = block.strip()
-        if temp_block:
-            new_blocks.append(temp_block)
-    return new_blocks
-
-def block_to_block_type(markdown):
-    heading_check = markdown.split(" ", 1)
-    lines = markdown.split("\n")
-    quote = False
-    ul_list = False
-    order_list = False
-    headings = ["#", "##", "###", "####", "#####", "######"]
-    if heading_check[0] in headings:
-        return "heading"
-    if markdown[:3] == "```" and markdown[-3:] == "```":
-        return "code"
-    for line in lines:
-        if line[0] == ">":
-            quote = True
-        else:
-            quote = False
-            break
-    if quote == True:
-        return "quote"
-    for line in lines:
-        if len(line) > 2:
-            if line[:2] == "* " or line[:2] == "- ":
-                ul_list = True
-            else:
-                ul_list = False
-                break
-    if ul_list == True:
-        return "unordered_list"
-    for index, line in enumerate(lines):
-        parts = line.split(".")
-        if parts[0].isdigit():
-            if parts[0] == f"{index + 1}" and parts[1][0] == " ":
-                order_list = True
-            else:
-                order_list = False
-                break
-    if order_list == True:
-        return "ordered_list"
-    return "paragraph"
-
-def markdown_to_html_node(markdown):
-    tags = {
-        "paragraph": "p",
-        "quote": "blockquote",
-        "ordered_list": "ol",
-        "unordered_list": "ul",
-        "list_item": "li",
-        "code": "code",
-        
-    }
-    blocks = markdown_to_blocks(markdown)
-    print(blocks)
-    # for block in blocks:
-    #     print(block)
-        # current_block = block_to_block_type(block)
-        # block_type = block_to_block_type(block)
-        # children = text_to_children(block)
-        # new_node = ParentNode(block_type, block, children)
- 
-
-def text_to_children(text):
-    return text_to_textnodes(text)

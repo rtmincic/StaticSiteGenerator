@@ -1,5 +1,6 @@
 from textnode import TextNode, TextType
-from important_functions import split_nodes_delimiter, split_nodes_link, split_nodes_image, markdown_to_blocks, block_to_block_type
+from important_functions import split_nodes_delimiter, split_nodes_link, split_nodes_image
+from blocks_functions import *
 import unittest
 import re
 
@@ -242,12 +243,12 @@ class SplitNodesDelimiterTest(unittest.TestCase):
         self.assertEqual(block_to_block_type(markdown), excepted)
 
     def test_code_block(self):
-        markdown = "``` This is a code block ```"
+        markdown = "```\nThis is a code block\n```"
         excepted = "code"
         self.assertEqual(block_to_block_type(markdown), excepted)
 
     def test_code_block_multiple_lines(self):
-        markdown = "``` This is a code block\nThis is part of a code block\nhere to this is```"
+        markdown = "```\nThis is a code block\nThis is part of a code block\nhere to this is\n```"
         excepted = "code"
         self.assertEqual(block_to_block_type(markdown), excepted)
 
