@@ -183,7 +183,14 @@ def markdown_to_html_node(markdown):
         
     }
     blocks = markdown_to_blocks(markdown)
-    for block in blocks:
-        current_block = block_to_block_type(block)
-        new_node = HTMLNode()
-    return
+    print(blocks)
+    # for block in blocks:
+    #     print(block)
+        # current_block = block_to_block_type(block)
+        # block_type = block_to_block_type(block)
+        # children = text_to_children(block)
+        # new_node = ParentNode(block_type, block, children)
+ 
+
+def text_to_children(text):
+    return text_to_textnodes(text)
