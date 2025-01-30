@@ -1,5 +1,5 @@
 import unittest
-from blocks_functions import *
+from markdown_blocks import *
 
 class SplitNodesDelimiterTest(unittest.TestCase):
     def test_paragraph(self):

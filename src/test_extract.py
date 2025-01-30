@@ -1,6 +1,7 @@
 import unittest
 
-from important_functions import extract_markdown_images
+from inline_markdown import *
+from generate_html import *
 
 class TestExtractMarkdownImages(unittest.TestCase):
     def test_two_images(self):
@@ -14,4 +15,9 @@ class TestExtractMarkdownImages(unittest.TestCase):
     def test_no_image(self):
         text = "This has no image and has no alt text."
         self.assertEqual(extract_markdown_images(text), [])
+
+    def test_extract_single_line_header(self):
+        markdown = "# This is a header"
+        expected = "This is a header"
+        self.assertEqual(extract_title(markdown), expected)
 

@@ -1,6 +1,6 @@
 from textnode import TextNode, TextType
-from important_functions import split_nodes_delimiter, split_nodes_link, split_nodes_image
-from blocks_functions import *
+from inline_markdown import split_nodes_delimiter, split_nodes_link, split_nodes_image
+from markdown_blocks import *
 import unittest
 import re
 
